@@ -261,3 +261,16 @@ quat_t quat_rotate(quat_t q, vec3_t p, quat_t dest) {
 
     return dest;
 }
+
+quat_t quat_axisFromAngle(vec3_t axis, numeric_t angle, quat_t dest) {
+	/*
+	ref: http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
+	 */
+	numeric_t a[3];
+	vec3_normalize(axis, a);
+	dest[3] = cos(angle/2);
+	dest[0] = a[0] * sin(angle/2);
+	dest[1] = a[1] * sin(angle/2);
+	dest[2] = a[2] * sin(angle/2);
+	return dest;
+}

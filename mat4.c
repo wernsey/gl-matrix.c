@@ -757,3 +757,49 @@ mat4_t mat4_fromRotationTranslation(quat_t quat, vec3_t vec, mat4_t dest) {
 
     return dest;
 }
+
+mat4_t mat4_alignVectors(vec3_t from, vec3_t to, mat4_t dest) {
+	// Adapted from https://gist.github.com/kevinmoran/b45980723e53edeb8a5a43c49f134724
+
+	float axis[3];
+	float cosA = vec3_dot(from, to);
+
+	// See https://www.j3d.org/matrix_faq/matrfaq_latest.html#Q39
+	// If the angles are nearly opposite (dot product == -1) then the cross product will be zero
+	// and won't be usable as an axis, so we rotate `from` with an arbitrary 90 degrees
+	if(fabs(cosA + 1.f) < 0.001) {
+		// http://www.gamedev.net/forums/topic/357797-rotate-a-vector-by-90-degrees/3348469/
+		float alt[3] = {from[0], -from[2], from[1]}; //x, -z, y
+		if(fabs(vec3_dot(alt, to) + 1.f) < 0.001) {
+			// Still to close, use a different axis
+			alt[0] = -from[2], alt[1] = from[1], alt[2] = from[0];
+		}
+		vec3_cross(alt, to, axis);
+	} else {
+		vec3_cross(from, to, axis);
+	}
+
+	const float k = 1.0f / (1.0f + cosA);
+
+	dest[ 0] = (axis[0] * axis[0] * k) + cosA;
+	dest[ 4] = (axis[1] * axis[0] * k) - axis[2];
+	dest[ 8] = (axis[2] * axis[0] * k) + axis[1];
+	dest[12] = 0;
+
+	dest[ 1] = (axis[0] * axis[1] * k) + axis[2];
+	dest[ 5] = (axis[1] * axis[1] * k) + cosA;
+	dest[ 9] = (axis[2] * axis[1] * k) - axis[0];
+	dest[13] = 0;
+
+	dest[ 2] = (axis[0] * axis[2] * k) - axis[1];
+	dest[ 6] = (axis[1] * axis[2] * k) + axis[0];
+	dest[10] = (axis[2] * axis[2] * k) + cosA;
+	dest[14] = 0;
+
+	dest[ 3] = 0;
+	dest[ 7] = 0;
+	dest[11] = 0;
+	dest[15] = 1;
+
+	return dest;
+}

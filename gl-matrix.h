@@ -1108,6 +1108,23 @@ mat4_t mat4_lookAt(vec3_t eye, vec3_t center, vec3_t up, mat4_t dest);
 mat4_t mat4_fromRotationTranslation(quat_t quat, vec3_t vec, mat4_t dest);
 
 /*
+ * mat4_alignVectors
+ * Creates a matrix that will rotate one vector to point into the direction of another.
+ *
+ * If the resulting matrix is applied to the source vector it will point in the
+ * direction of the target vector.
+ *
+ * Params:
+ * source - Source orientation
+ * target - Target orientation
+ * dest - mat4_t receiving operation result.
+ *
+ * Returns:
+ * dest
+ */
+mat4_t mat4_alignVectors(vec3_t source, vec3_t target, mat4_t dest);
+
+/*
  * mat4_str
  * Writes a string representation of a mat4
  *
@@ -1292,6 +1309,20 @@ quat_t quat_toMat4(quat_t quat, mat4_t dest);
  * dest if not NULL, quat otherwise
  */
 quat_t quat_slerp(quat_t quat, quat_t quat2, numeric_t slerp, quat_t dest);
+
+/*
+ * quat_axisFromAngle
+ * Creates a quaternion to rotate objects around a specific axis by a specific angle
+ *
+ * Params:
+ * axis - The axis to rotate around
+ * angle - The angle to rotate
+ * dest - quat_t receiving operation result
+ *
+ * Returns:
+ * dest
+ */
+quat_t quat_axisFromAngle(vec3_t axis, numeric_t angle, quat_t dest);
 
 /*
  * quat_rotate

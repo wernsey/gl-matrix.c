@@ -755,6 +755,20 @@ mat3_t mat3_transpose(mat3_t mat, mat3_t dest);
 mat4_t mat3_toMat4(mat3_t mat, mat4_t dest);
 
 /*
+ * mat3_multiplyVec3
+ * Transforms a vec3_t with the given matrix
+ *
+ * Params:
+ * mat - mat3_t to transform the vector with
+ * vec - vec3_t to transform
+ * dest - Optional, vec3_t receiving operation result. If NULL, result is written to vec
+ *
+ * Returns:
+ * dest if not NULL, vec otherwise
+ */
+vec3_t mat3_multiplyVec3(mat3_t mat, vec3_t vec, vec3_t dest);
+
+/*
  * mat3_str
  * Writes a string representation of a mat3
  *

@@ -100,3 +100,15 @@ mat4_t mat3_toMat4(mat3_t mat, mat4_t dest) {
 
     return dest;
 }
+
+vec3_t mat3_multiplyVec3(mat3_t mat, vec3_t vec, vec3_t dest) {
+    if (!dest) { dest = vec; }
+
+    numeric_t x = vec[0], y = vec[1], z = vec[2];
+
+    dest[0] = mat[0] * x + mat[3] * y + mat[6] * z;
+    dest[1] = mat[1] * x + mat[4] * y + mat[7] * z;
+    dest[2] = mat[2] * x + mat[5] * y + mat[8] * z;
+
+    return dest;
+}
